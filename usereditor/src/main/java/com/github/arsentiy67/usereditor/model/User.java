@@ -50,7 +50,7 @@ public class User {
 		this.name = name;
 	}
  
-	@Column(name = "password", nullable = false, length = 40)
+	@Column(name = "password", nullable = false, length = 60)
 	public String getPassword() {
 		return this.password;
 	}
