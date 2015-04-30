@@ -13,4 +13,6 @@ public interface UserDAO {
 	List<User> getAllUsers();
 	
 	boolean hasRole(Integer userId, String role);
+	
+	void createUpdateUser(User user);
 }

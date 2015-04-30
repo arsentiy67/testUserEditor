@@ -38,7 +38,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			user.getPassword(),	
 			true, true, true, true, 
 			authorities,
-			user.getTimezone());
+			user.getTimezone(),
+			user.getUserId());
 	}
 
 	private List<GrantedAuthority> buildUserAuthority(Set<UserRole> userRoles) {

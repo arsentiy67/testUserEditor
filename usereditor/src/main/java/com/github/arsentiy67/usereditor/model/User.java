@@ -1,7 +1,5 @@
 package com.github.arsentiy67.usereditor.model;
 
-import static javax.persistence.GenerationType.IDENTITY;
-
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -10,9 +8,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 @Entity
 @Table(name = "users", schema = "public")
@@ -31,7 +34,8 @@ public class User {
 	public User() {}
 	
 	@Id
-	@GeneratedValue(strategy = IDENTITY)
+	@SequenceGenerator(name="pk_users_id",sequenceName="users_id_seq", allocationSize=1)
+	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="pk_users_id")
 	@Column(name = "user_id", unique = true, nullable = false)
 	public Integer getUserId() {
 		return userId;
@@ -60,6 +64,7 @@ public class User {
 	}
 	
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+	@Cascade(value = {CascadeType.ALL, CascadeType.DELETE_ORPHAN})
 	public Set<UserRole> getUserRole() {
 		return this.userRole;
 	}

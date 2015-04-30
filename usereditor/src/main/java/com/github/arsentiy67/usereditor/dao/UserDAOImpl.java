@@ -53,5 +53,8 @@ public class UserDAOImpl implements UserDAO {
 			return null;
 		}
 	}
-
+	
+	public void createUpdateUser(User user) {
+		sessionFactory.getCurrentSession().saveOrUpdate(user);
+	}
 }

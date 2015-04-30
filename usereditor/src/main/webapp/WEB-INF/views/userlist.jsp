@@ -55,6 +55,9 @@
 							<sec:authorize access="hasRole('ROLE_EDITOR')">
 								<a href="${editUrl}${user.userId}">Edit</a>
 							</sec:authorize>
+							<c:if test="${user.roleStr == 'USER' && editorId == user.userId}">
+								<a href="${editUrl}${user.userId}">Edit</a>
+							</c:if>
 						</td>
 					</tr>
 				</c:forEach>

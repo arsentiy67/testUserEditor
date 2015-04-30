@@ -8,6 +8,7 @@
 <title>Edit</title>
 </head>
 <body>
+	<c:url value="/saveuser" var="saveuserUrl"/>
 	<c:url value="/userlist" var="userlistUrl"/>
 	<c:url value="/login" var="loginUrl" />
 	<c:url value="/logout" var="logoutUrl" />
@@ -28,40 +29,61 @@
 					href="${userlistUrl}">All users</a> | <a
 					href="javascript:formSubmit()"> Logout</a>
 			</h2>
+			<h3>${error}</h3>
 		</center>
 	</c:if>
-	<table>
-		<tr>
-			<td>Email:</td>
-			<td><input type='text' name='user.email' value="${user.email}"></td>
-		</tr>
-		<tr>
-			<td>Password:</td>
-			<td><input type='password' name='user.password' pattern="(?=.*\d)(?=.*[A-Z]).{6,}" 
-				title="Must contain at least one number and one uppercase letter, and at least 6 or more characters"/></td>
-		</tr>
-		<tr>
-			<td>Role:</td>
-			<td>
-				<select name='user.roleStr'>
-					<option selected="selected" style="display: none;">${user.roleStr}</option>
-					<option>USER</option>
-					<option>EDITOR</option>
-				</select>
-			</td>
-		</tr>
-		<tr>
-			<td>Create date:</td>
-			<td><input type='text' disabled="disabled" readonly="readonly" value="${user.createDateStr}"></td>
-		</tr>
-		<tr>
-			<td>Last update date:</td>
-			<td><input type='text' disabled="disabled" readonly="readonly" value="${user.updateDateStr}"></td>
-		</tr>
-
-		<tr>
-			<td colspan='2'><input name="submit" type="submit" value="submit" /></td>
-		</tr>
-  	</table>
+	<form action="${saveuserUrl}" method="post">
+		<table>
+			<tr>
+				<td>Email:</td>
+				<td><input type='text' name='user.email' value="${user.email}"></td>
+			</tr>
+			<tr>
+				<td>Name:</td>
+				<td><input type='text' name='user.name' value="${user.name}"></td>
+			</tr>
+			<tr>
+				<c:if test="${user.userId != null}">
+					<td>Password:</td>
+					<td><input type='password' name='user.password' pattern="(?=.*\d)(?=.*[A-Z]).{6,}" 
+						title="Must contain at least one number and one uppercase letter, and at least 6 or more characters"/></td>
+				</c:if>
+				<c:if test="${user.userId == null}">
+					<td>Password:</td>
+					<td><input type='password' name='user.password' pattern="(?=.*\d)(?=.*[A-Z]).{6,}" 
+						title="Must contain at least one number and one uppercase letter, and at least 6 or more characters" required="required"/></td>
+				</c:if>				
+			</tr>
+			<tr>
+				<td>Role:</td>
+				<td>
+					<c:if test="${isEditor == true}">
+						<select name='user.roleStr'>
+							<option selected="selected" style="display: none;">${user.roleStr}</option>
+							<option>USER</option>
+							<option>EDITOR</option>
+						</select>
+					</c:if>
+					<c:if test="${isEditor == null || isEditor == false}">
+						<input type="text" value="${user.roleStr}" disabled="disabled" readonly="readonly">
+					</c:if>
+				</td>
+			</tr>
+			<tr>
+				<td>Create date:</td>
+				<td><input type='text' disabled="disabled" readonly="readonly" value="${user.createDateStr}"></td>
+			</tr>
+			<tr>
+				<td>Last update date:</td>
+				<td><input type='text' disabled="disabled" readonly="readonly" value="${user.updateDateStr}"></td>
+			</tr>
+	
+			<tr>
+				<td colspan='2'><input name="submit" type="submit" value="submit" /></td>
+			</tr>
+	  	</table>
+	  	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+	  	<input type="hidden" name="user.userId" value="${user.userId}" />
+	  </form>
 </body>
 </html>

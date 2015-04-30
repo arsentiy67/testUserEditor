@@ -14,8 +14,8 @@ import org.springframework.web.servlet.ModelAndView;
 public class MainController {
 
 	@RequestMapping("/")
-	public ModelAndView showMessage() {
-		return new ModelAndView("welcome");
+	public ModelAndView welcomePage() {
+		return new ModelAndView("redirect:/userlist");
 	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
