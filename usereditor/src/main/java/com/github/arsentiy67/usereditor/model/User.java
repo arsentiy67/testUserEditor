@@ -2,6 +2,7 @@ package com.github.arsentiy67.usereditor.model;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,8 +19,12 @@ import javax.persistence.Table;
 public class User {
 
 	private Integer userId;
-	private String username;
+	private String email;
+	private String name;
 	private String password;
+	private String timezone;
+	private Date createDate;
+	private Date updateDate;
 	
 	private Set<UserRole> userRole = new HashSet<UserRole>(0);
 	
@@ -28,21 +33,21 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "user_id", unique = true, nullable = false)
-	public Integer getId() {
+	public Integer getUserId() {
 		return userId;
 	}
 	
-	public void setId(Integer userId) {
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
 	
-	@Column(name = "username", unique = true, nullable = false, length = 40)
-	public String getUsername() {
-		return this.username;
+	@Column(name = "name", unique = true, nullable = false, length = 40)
+	public String getName() {
+		return this.name;
 	}
  
-	public void setUsername(String username) {
-		this.username = username;
+	public void setName(String name) {
+		this.name = name;
 	}
  
 	@Column(name = "password", nullable = false, length = 40)
@@ -61,5 +66,41 @@ public class User {
  
 	public void setUserRole(Set<UserRole> userRole) {
 		this.userRole = userRole;
+	}
+
+	@Column(name = "email", nullable = true, length = 40)
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	@Column(name = "timezone", nullable = true, length = 20)
+	public String getTimezone() {
+		return timezone;
+	}
+
+	public void setTimezone(String timezone) {
+		this.timezone = timezone;
+	}
+
+	@Column(name = "create_date", nullable = true)
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	@Column(name = "update_date", nullable = true)
+	public Date getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
 	}
 }

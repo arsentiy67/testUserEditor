@@ -13,10 +13,9 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class MainController {
 
-	@RequestMapping({ "/", "/welcome**" })
+	@RequestMapping("/")
 	public ModelAndView showMessage() {
-		ModelAndView mv = new ModelAndView("welcome");
-		return mv;
+		return new ModelAndView("welcome");
 	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -25,7 +24,7 @@ public class MainController {
  
 		ModelAndView model = new ModelAndView();
 		if (error != null) {
-			model.addObject("error", "Invalid username and password!");
+			model.addObject("error", "Invalid email and password!");
 		}
  
 		if (logout != null) {

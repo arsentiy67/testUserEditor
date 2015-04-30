@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.github.arsentiy67.usereditor.dao.UserDAO;
 import com.github.arsentiy67.usereditor.model.User;
 import com.github.arsentiy67.usereditor.model.UserRole;
+import com.github.arsentiy67.usereditor.userdetails.UserDetailsExt;
 
 @Service("userDetailsService")
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -23,17 +24,21 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	@Autowired
 	private UserDAO userDAO;
 	
-	public UserDetails loadUserByUsername(final String username)
+	public UserDetails loadUserByUsername(final String email)
 			throws UsernameNotFoundException {
-		User user = userDAO.findByUserName(username);
+		User user = userDAO.findByUserEmail(email);
 		List<GrantedAuthority> authorities = buildUserAuthority(user.getUserRole());
 		return buildUserForAuthentication(user, authorities);
 	}
 
 	private UserDetails buildUserForAuthentication(User user,
 			List<GrantedAuthority> authorities) {
-		return new org.springframework.security.core.userdetails.User(
-			user.getUsername(), user.getPassword(),	true, true, true, true, authorities);
+		return new UserDetailsExt(
+			user.getName(), 
+			user.getPassword(),	
+			true, true, true, true, 
+			authorities,
+			user.getTimezone());
 	}
 
 	private List<GrantedAuthority> buildUserAuthority(Set<UserRole> userRoles) {

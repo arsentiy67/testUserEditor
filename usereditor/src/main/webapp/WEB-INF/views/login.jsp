@@ -49,26 +49,22 @@
 			<div class="msg">${msg}</div>
 		</c:if>
  
-		<form name='loginForm'
-		  action="<c:url value='/login' />" method='POST'>
- 
-		<table>
-			<tr>
-				<td>User:</td>
-				<td><input type='text' name='username'></td>
-			</tr>
-			<tr>
-				<td>Password:</td>
-				<td><input type='password' name='password' pattern="(?=.*\d)(?=.*[A-Z]).{6,}" 
-					title="Must contain at least one number and one uppercase letter, and at least 6 or more characters"/></td>
-			</tr>
-			<tr>
-				<td colspan='2'><input name="submit" type="submit" value="submit" /></td>
-			</tr>
-		  </table>
- 
-		  <input type="hidden" name="${_csrf.parameterName}"
-			value="${_csrf.token}" />
+		<form name='loginForm' action="<c:url value='/login' />" method='POST'>
+			<table>
+				<tr>
+					<td>Email:</td>
+					<td><input type='text' name='email'></td>
+				</tr>
+				<tr>
+					<td>Password:</td>
+					<td><input type='password' name='password' pattern="(?=.*\d)(?=.*[A-Z]).{6,}" 
+						title="Must contain at least one number and one uppercase letter, and at least 6 or more characters"/></td>
+				</tr>
+				<tr>
+					<td colspan='2'><input name="submit" type="submit" value="submit" /></td>
+				</tr>
+		  	</table>
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 		</form>
 	</div>
 </body>

@@ -30,10 +30,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 			.antMatchers("/edituser/**").access("hasRole('ROLE_EDITOR')")
+			.antMatchers("/userlist/**").access("hasRole('ROLE_EDITOR') or hasRole('ROLE_USER')")
 //			.anyRequest().authenticated()
 			.and()
-				.formLogin().loginPage("/login").failureUrl("/login?error")
-				.usernameParameter("username").passwordParameter("password")
+				.formLogin().loginPage("/login").failureUrl("/login?error").defaultSuccessUrl("/userlist")
+				.usernameParameter("email").passwordParameter("password")
 			.and()
 				.httpBasic()
 			.and()
