@@ -44,6 +44,9 @@ public class UserDAOImpl implements UserDAO {
 	
 	@SuppressWarnings("unchecked")
 	public User findByUserId(Integer userId) {
+		if (userId == null) {
+			return null;
+		}
 		List<User> users = new ArrayList<User>();
 		users = sessionFactory.getCurrentSession().createQuery("from User where userId=:userId")
 			.setInteger("userId", userId).list();

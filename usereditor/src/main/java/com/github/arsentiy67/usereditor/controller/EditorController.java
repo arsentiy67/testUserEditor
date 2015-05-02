@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,22 +28,30 @@ public class EditorController {
 	@Autowired
 	private UserDAO userDAO;
 	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	@RequestMapping(value = "/edituser**", method = RequestMethod.GET)
-	public ModelAndView editUser(@RequestParam("id") Integer id) {
+	public ModelAndView editUser(@RequestParam(value = "id", required = false) Integer id) {
 		ModelAndView mv = new ModelAndView();
 		User user = userDAO.findByUserId(id);
+		UserDetailsExt editorDetails = getUserDetails();
+		boolean editor = isEditor();
 		if (user != null) { //update user
-			UserDetailsExt editorDetails = getUserDetails();
-			boolean editor = isEditor();
 			if (editor || editorDetails.getUserId() == id) {
 				UserDTO userDTO = convertToEditorTimeZone(user, editorDetails.getUserTimeZone());
 				mv.addObject("user", userDTO);
-				mv.addObject("isEditor", editor);
 				mv.setViewName("edituser");
 			} else {
 				mv.setViewName("403");
 			}
-		} //else - create new user
+		} else { //create new user
+			UserDTO newUser = new UserDTO();
+			newUser.setRoleStr("USER");
+			mv.addObject("user", newUser);
+			mv.setViewName("edituser");
+		}
+		mv.addObject("isEditor", editor);
 		return mv;
 	}
 	
@@ -52,7 +61,8 @@ public class EditorController {
 			@RequestParam("user.email") String email,
 			@RequestParam(value="user.name", required = false) String name,
 			@RequestParam(value="user.password", required = false) String password,
-			@RequestParam(value="user.roleStr", required = false) String roleStr
+			@RequestParam(value="user.roleStr", required = false) String roleStr,
+			@RequestParam(value="user.timezone", required = false) String timezone
 		) {
 		
 		ModelAndView mv = new ModelAndView();
@@ -70,8 +80,9 @@ public class EditorController {
 			} else {
 				user.setEmail(email);
 				user.setName(name);
+				user.setTimezone(timezone);
 				if (password != null && !"".equals(password)) {
-					user.setPassword(password);
+					user.setPassword(passwordEncoder.encode(password));
 				}
 				user.setUserId(userId);
 				user.setUpdateDate(new Date());
@@ -87,10 +98,15 @@ public class EditorController {
 				user.setUserId(userId);
 				user.setEmail(email);
 				user.setName(name);
-				user.setPassword(password);
+				user.setTimezone(timezone);
+				user.setPassword(passwordEncoder.encode(password));
 				Date now = new Date();
 				user.setCreateDate(now);
 				user.setUpdateDate(now);
+				UserRole roleUser = new UserRole();
+				roleUser.setUser(user);
+				roleUser.setRole("ROLE_USER");
+				updateRoles(user, roleStr);
 				userDAO.createUpdateUser(user);
 			}
 		}

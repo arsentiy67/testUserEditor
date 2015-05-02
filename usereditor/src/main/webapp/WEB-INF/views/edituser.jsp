@@ -43,6 +43,10 @@
 				<td><input type='text' name='user.name' value="${user.name}"></td>
 			</tr>
 			<tr>
+				<td>Time zone:</td>
+				<td><input type='text' name='user.timezone' value="${user.timezone}"></td>
+			</tr>
+			<tr>
 				<c:if test="${user.userId != null}">
 					<td>Password:</td>
 					<td><input type='password' name='user.password' pattern="(?=.*\d)(?=.*[A-Z]).{6,}" 

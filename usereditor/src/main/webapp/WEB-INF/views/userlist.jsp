@@ -10,6 +10,8 @@
 <body>
 	<c:url value="/login" var="loginUrl" />
 	<c:url value="/logout" var="logoutUrl" />
+	<c:url value="/edituser" var="addUserUrl" />
+	<c:url value="/edituser?id=" var="editUserUrl" />
 	<form action="${logoutUrl}" method="post" id="logoutForm">
 		<input type="hidden" name="${_csrf.parameterName}"
 			value="${_csrf.token}" />
@@ -27,7 +29,9 @@
 			</c:if>
 		</h2>
 		<sec:authorize access="hasRole('ROLE_EDITOR')">
-			<h3>Your role is Editor</h3>
+			<h2>
+				<a href="${addUserUrl}">Add new user</a>
+			</h2>
 		</sec:authorize>
 	</center>
 	<center>
@@ -45,7 +49,6 @@
 				</tr>
 			</thead>
 			<tbody>
-				<c:url value="/edituser?id=" var="editUrl" />
 				<c:forEach items="${allUsers}" var="user">
 					<tr>
 						<td align="center">${user.email}</td>
@@ -53,10 +56,10 @@
 						<td align="center">${user.roleStr}</td>
 						<td align="center">
 							<sec:authorize access="hasRole('ROLE_EDITOR')">
-								<a href="${editUrl}${user.userId}">Edit</a>
+								<a href="${editUserUrl}${user.userId}">Edit</a>
 							</sec:authorize>
 							<c:if test="${user.roleStr == 'USER' && editorId == user.userId}">
-								<a href="${editUrl}${user.userId}">Edit</a>
+								<a href="${editUserUrl}${user.userId}">Edit</a>
 							</c:if>
 						</td>
 					</tr>

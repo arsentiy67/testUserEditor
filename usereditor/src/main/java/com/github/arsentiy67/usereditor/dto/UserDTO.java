@@ -10,6 +10,7 @@ public class UserDTO extends User {
 		setUserId(user.getUserId());
 		setEmail(user.getEmail());
 		setName(user.getName());
+		setTimezone(user.getTimezone());
 		setCreateDate(user.getCreateDate());
 		setUpdateDate(user.getUpdateDate());
 	}
