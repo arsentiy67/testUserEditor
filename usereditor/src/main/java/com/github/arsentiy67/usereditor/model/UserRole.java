@@ -46,7 +46,7 @@ public class UserRole {
 		this.user = user;
 	}
  
-	@Column(name = "role", nullable = false, length = 40)
+	@Column(name = "role", nullable = false, length = 255)
 	public String getRole() {
 		return this.role;
 	}

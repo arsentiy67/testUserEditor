@@ -77,7 +77,7 @@
 		var city = document.getElementById("inputCity" + lineNumber).value;
 		var errElem = document.getElementById("errorAddress" + lineNumber);
 		if (country == null || country == "" || city == null || city == "") {
-			errElem.innerHTML = "Both fields country and city must be filled";
+			errElem.innerHTML = "You can't leave this empty!";
 			return false;
 		} else {
 			errElem.innerHTML = "";

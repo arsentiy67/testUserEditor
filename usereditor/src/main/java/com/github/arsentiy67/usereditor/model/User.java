@@ -46,7 +46,7 @@ public class User {
 		this.userId = userId;
 	}
 	
-	@Column(name = "name", unique = true, nullable = false, length = 40)
+	@Column(name = "name", unique = true, nullable = false, length = 255)
 	public String getName() {
 		return this.name;
 	}
@@ -84,7 +84,7 @@ public class User {
 		this.userAddress = userAddress;
 	}
 	
-	@Column(name = "email", nullable = true, length = 40)
+	@Column(name = "email", nullable = true, length = 255)
 	public String getEmail() {
 		return email;
 	}

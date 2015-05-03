@@ -8,11 +8,11 @@ ALTER TABLE user_address_id_seq OWNER TO test;
 CREATE TABLE users
 (
    user_id integer, 
-   email character varying(40), 
+   email character varying(255), 
    timezone character varying(20), 
    create_date timestamp with time zone,
    update_date timestamp with time zone,
-   name character varying(40), 
+   name character varying(255), 
    password character varying(60), 
     PRIMARY KEY (user_id), 
     UNIQUE (email)
@@ -28,7 +28,7 @@ CREATE TABLE user_roles
 (
    user_role_id integer, 
    user_id integer,
-   role character varying(40), 
+   role character varying(255), 
     PRIMARY KEY (user_role_id), 
     FOREIGN KEY (user_id) REFERENCES users (user_id) ON UPDATE NO ACTION ON DELETE CASCADE
 ) 
@@ -42,8 +42,8 @@ CREATE TABLE user_address
 (
   user_address_id integer NOT NULL,
   user_id integer,
-  country character varying(40),
-  city character varying(40), 
+  country character varying(255),
+  city character varying(255), 
   CONSTRAINT user_address_pkey PRIMARY KEY (user_address_id ),
   CONSTRAINT user_address_user_id_fkey FOREIGN KEY (user_id)
       REFERENCES users (user_id) MATCH SIMPLE

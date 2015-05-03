@@ -42,14 +42,14 @@ public class UserAddress {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	@Column(name = "country", nullable = false, length = 40)
+	@Column(name = "country", nullable = false, length = 255)
 	public String getCountry() {
 		return country;
 	}
 	public void setCountry(String country) {
 		this.country = country;
 	}
-	@Column(name = "city", nullable = false, length = 40)
+	@Column(name = "city", nullable = false, length = 255)
 	public String getCity() {
 		return city;
 	}
