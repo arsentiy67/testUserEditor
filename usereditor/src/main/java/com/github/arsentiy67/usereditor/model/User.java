@@ -1,8 +1,8 @@
 package com.github.arsentiy67.usereditor.model;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,7 +29,8 @@ public class User {
 	private Date createDate;
 	private Date updateDate;
 	
-	private Set<UserRole> userRole = new HashSet<UserRole>(0);
+	private List<UserRole> userRole = new ArrayList<UserRole>();
+	private List<UserAddress> userAddress = new ArrayList<UserAddress>();
 	
 	public User() {}
 	
@@ -65,14 +66,24 @@ public class User {
 	
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
 	@Cascade(value = {CascadeType.ALL, CascadeType.DELETE_ORPHAN})
-	public Set<UserRole> getUserRole() {
+	public List<UserRole> getUserRole() {
 		return this.userRole;
 	}
  
-	public void setUserRole(Set<UserRole> userRole) {
+	public void setUserRole(List<UserRole> userRole) {
 		this.userRole = userRole;
 	}
 
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+	@Cascade(value = {CascadeType.ALL, CascadeType.DELETE_ORPHAN})
+	public List<UserAddress> getUserAddress() {
+		return userAddress;
+	}
+	
+	public void setUserAddress(List<UserAddress> userAddress) {
+		this.userAddress = userAddress;
+	}
+	
 	@Column(name = "email", nullable = true, length = 40)
 	public String getEmail() {
 		return email;

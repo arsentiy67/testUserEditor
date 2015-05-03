@@ -11,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.github.arsentiy67.usereditor.dao.UserDAO;
 import com.github.arsentiy67.usereditor.dto.UserDTO;
 import com.github.arsentiy67.usereditor.model.User;
+import com.github.arsentiy67.usereditor.model.UserAddress;
 import com.github.arsentiy67.usereditor.model.UserRole;
 import com.github.arsentiy67.usereditor.userdetails.UserDetailsExt;
 
@@ -56,58 +58,60 @@ public class EditorController {
 	}
 	
 	@RequestMapping(value = "/saveuser**", method = RequestMethod.POST)
-	public ModelAndView saveUser(
-			@RequestParam("user.userId") Integer userId,
-			@RequestParam("user.email") String email,
-			@RequestParam(value="user.name", required = false) String name,
-			@RequestParam(value="user.password", required = false) String password,
-			@RequestParam(value="user.roleStr", required = false) String roleStr,
-			@RequestParam(value="user.timezone", required = false) String timezone
-		) {
+	public ModelAndView saveUser(@ModelAttribute("user") UserDTO userFromRequest) {
 		
+		Integer userId = userFromRequest.getUserId();
 		ModelAndView mv = new ModelAndView();
 		
 		boolean editor = isEditor();
 		
-		User user = userDAO.findByUserId(userId);
+		User userFromDb = userDAO.findByUserId(userId);
 		
 		UserDetailsExt editorDetails = getUserDetails();
-		
-		if (user != null) { //update
+		if (userFromDb != null) { //update
 			if (!editor && editorDetails.getUserId() != userId) {
 				mv.setViewName("403");
 				return mv;
 			} else {
-				user.setEmail(email);
-				user.setName(name);
-				user.setTimezone(timezone);
+				userFromDb.setEmail(userFromRequest.getEmail());
+				userFromDb.setName(userFromRequest.getName());
+				userFromDb.setTimezone(userFromRequest.getTimezone());
+				String password = userFromRequest.getPassword();
 				if (password != null && !"".equals(password)) {
-					user.setPassword(passwordEncoder.encode(password));
+					userFromDb.setPassword(passwordEncoder.encode(password));
 				}
-				user.setUserId(userId);
-				user.setUpdateDate(new Date());
-				updateRoles(user, roleStr);
-				userDAO.createUpdateUser(user);
+				userFromDb.setUserId(userId);
+				userFromDb.setUpdateDate(new Date());
+				
+				for (int i = userFromDb.getUserAddress().size() - 1; i >= 0; i--) {
+					UserAddress address = userFromDb.getUserAddress().get(i);
+					userFromDb.getUserAddress().remove(address);
+				}
+				for (UserAddress address : userFromRequest.getUserAddress()) {
+					address.setUser(userFromDb);
+					userFromDb.getUserAddress().add(address);
+				}
+				updateRoles(userFromDb, userFromRequest.getRoleStr());
+				userDAO.createUpdateUser(userFromDb);
 			}
 		} else { //create new
 			if (!editor) {
 				mv.setViewName("403");
 				return mv;
 			} else {
-				user = new User();
-				user.setUserId(userId);
-				user.setEmail(email);
-				user.setName(name);
-				user.setTimezone(timezone);
-				user.setPassword(passwordEncoder.encode(password));
+				User newUser = UserDTO.userFromDTO(userFromRequest);
+				newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
 				Date now = new Date();
-				user.setCreateDate(now);
-				user.setUpdateDate(now);
+				newUser.setCreateDate(now);
+				newUser.setUpdateDate(now);
 				UserRole roleUser = new UserRole();
-				roleUser.setUser(user);
+				roleUser.setUser(newUser);
 				roleUser.setRole("ROLE_USER");
-				updateRoles(user, roleStr);
-				userDAO.createUpdateUser(user);
+				for (UserAddress address : newUser.getUserAddress()) {
+					address.setUser(newUser);
+				}
+				updateRoles(newUser, userFromRequest.getRoleStr());
+				userDAO.createUpdateUser(newUser);
 			}
 		}
 		

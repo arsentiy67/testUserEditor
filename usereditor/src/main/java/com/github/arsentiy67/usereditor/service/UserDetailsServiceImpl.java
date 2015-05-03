@@ -42,7 +42,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			user.getUserId());
 	}
 
-	private List<GrantedAuthority> buildUserAuthority(Set<UserRole> userRoles) {
+	private List<GrantedAuthority> buildUserAuthority(List<UserRole> userRoles) {
 		Set<GrantedAuthority> setAuths = new HashSet<GrantedAuthority>();
 		 
 		// Build user's authorities

@@ -36,7 +36,7 @@
 }
 </style>
 </head>
-<body onload='document.loginForm.username.focus();'>
+<body onload='document.loginForm.email.focus();'>
  
 	<div id="login-box">
 	
