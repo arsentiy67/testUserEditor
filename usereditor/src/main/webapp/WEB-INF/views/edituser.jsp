@@ -101,9 +101,9 @@
 	
 	function enableAddress() {
 		for (var i = 0; i < addressCount; i++) {
-			document.getElementById("inputCountry" + i).readonly = "";
+			document.getElementById("inputCountry" + i).readOnly = "";
 			document.getElementById("inputCountry" + i).disabled = "";
-			document.getElementById("inputCity" + i).readonly = "";
+			document.getElementById("inputCity" + i).readOnly = "";
 			document.getElementById("inputCity" + i).disabled = "";
 			
 			document.getElementById("btnAdd" + i).hidden = "";
