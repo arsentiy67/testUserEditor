@@ -77,7 +77,7 @@
 		var city = document.getElementById("inputCity" + lineNumber).value;
 		var errElem = document.getElementById("errorAddress" + lineNumber);
 		if (country == null || country == "" || city == null || city == "") {
-			errElem.innerHTML = "You can't leave this empty!";
+			errElem.innerHTML = "City and Country must be indicated necessarily!!!";
 			return false;
 		} else {
 			errElem.innerHTML = "";
@@ -97,6 +97,18 @@
 	
 	function validate() {
 		return validateAddress();		
+	}
+	
+	function enableAddress() {
+		for (var i = 0; i < addressCount; i++) {
+			document.getElementById("inputCountry" + i).readonly = "";
+			document.getElementById("inputCountry" + i).disabled = "";
+			document.getElementById("inputCity" + i).readonly = "";
+			document.getElementById("inputCity" + i).disabled = "";
+			
+			document.getElementById("btnAdd" + i).hidden = "";
+			document.getElementById("btnClear" + i).hidden = "";
+		}
 	}
 </script>
 </head>
@@ -174,15 +186,16 @@
 	  	
 		<div id="addressDiv">
 			<label>Address: </label>
+			<label><a href="javascript:enableAddress();">EDIT</a></label>
 			<c:forEach items="${user.userAddress}" var="address" varStatus="status">
 				<div id="addressLine${status.index}">
  					<label>Country: </label>
-					<input type='text' id="inputCountry${status.index}" value="${address.country}" name="userAddress[${status.index}].country"/>
+					<input type='text' id="inputCountry${status.index}" value="${address.country}" name="userAddress[${status.index}].country" readonly="readonly" disabled="disabled"/>
 					<label>City: </label>
-					<input type='text' id="inputCity${status.index}" value="${address.city}" name="userAddress[${status.index}].city"/>
+					<input type='text' id="inputCity${status.index}" value="${address.city}" name="userAddress[${status.index}].city" readonly="readonly" disabled="disabled"/>
 					
-					<input type="button" onclick="addAddressLine();" value="+">
-					<input type="button" id="btnClear${status.index}" onclick="delAddressLine(${status.index});" value="-">
+					<input type="button" id="btnAdd${status.index}" onclick="addAddressLine();" value="+" hidden="hidden">
+					<input type="button" id="btnClear${status.index}" onclick="delAddressLine(${status.index});" value="-" hidden="hidden">
 					
 					<label id="errorAddress${status.index}" style="color: red;"></label> 
 				</div>
